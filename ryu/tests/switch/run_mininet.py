@@ -9,6 +9,8 @@ from mininet.node import RemoteController
 from mininet.node import OVSSwitch
 from mininet.node import UserSwitch
 from mininet.term import makeTerm
+from mininet.node import Lagopus
+from time import sleep
 
 from oslo_config import cfg
 from ryu import version
@@ -16,7 +18,7 @@ from ryu import version
 if '__main__' == __name__:
 
     opts = [
-        cfg.StrOpt('switch', default='ovs',
+        cfg.StrOpt('switch', default='lagopus',
                    help='test switch (ovs|ovs13|ovs14|cpqd)')
     ]
     conf = cfg.ConfigOpts()
@@ -24,7 +26,7 @@ if '__main__' == __name__:
     conf(project='ryu', version='run_mininet.py %s' % version)
     conf(sys.argv[1:])
     switch_type = {'ovs': OVSSwitch, 'ovs13': OVSSwitch,
-                   'ovs14': OVSSwitch, 'cpqd': UserSwitch}
+                   'ovs14': OVSSwitch, 'cpqd': UserSwitch, 'lagopus': Lagopus}
     switch = switch_type.get(conf.switch)
     if switch is None:
         raise ValueError('Invalid switch type. [%s]', conf.switch)
@@ -36,9 +38,14 @@ if '__main__' == __name__:
     s1 = net.addSwitch('s1')
     s2 = net.addSwitch('s2')
 
+    h1 = net.addHost('h1')
+    h2 = net.addHost('h2')
+
     Link(s1, s2)
     Link(s1, s2)
     Link(s1, s2)
+    Link(s1, h1)
+    Link(s2, h2)
 
     net.build()
     c0.start()
@@ -52,6 +59,8 @@ if '__main__' == __name__:
         s1.cmd('ovs-vsctl set Bridge s1 protocols=OpenFlow14')
         s2.cmd('ovs-vsctl set Bridge s2 protocols=OpenFlow14')
 
+    sleep(15)
+    net.pingAll()
     CLI(net)
 
     net.stop()
