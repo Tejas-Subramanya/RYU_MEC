@@ -656,6 +656,10 @@ class Flow(object):
         self.gre_protocol = 0
         self.gre_key = 0
         self.gre_seqnum = 0
+        self.gtpu_flags = 0
+        self.gtpu_ver = 0
+        self.gtpu_msgtype = 0
+        self.gtpu_teid = 0
 
 
 class FlowWildcards(object):
@@ -752,6 +756,12 @@ class OFPMatch(StringifyMixin):
     gre_protocol     Integer 16bit
     gre_key          Integer 32bit
     gre_seqnum       Integer 32bit
+    gtpu_flags       Integer 8bit
+    gtpu_ver         Integer 8bit
+    gtpu_msgtype     Integer 8bit
+    gtpu_teid        Integer 32bit
+
+
     ================ =============== ==================================
 
     Example::
@@ -1003,6 +1013,11 @@ class OFPMatch(StringifyMixin):
         OXM_OF_GRE_PROTOCOL
         OXM_OF_GRE_KEY
         OXM_OF_GRE_SEQNUM
+        OXM_OF_GTPU_FLAGS
+        OXM_OF_GTPU_VER
+        OXM_OF_GTPU_MSGTYPE
+        OXM_OF_GTPU_TEID
+
         ====================== ===================================
         """
         self.fields.append(OFPMatchField.make(header, value, mask))
@@ -1299,6 +1314,38 @@ class OFPMatch(StringifyMixin):
                 header = ofproto.OXM_OF_GRE_SEQNUM
             self.append_field(header, self._flow.gre_seqnum,
                               self._wc.gre_seqnum_mask)
+
+        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_flags):
+            if self._wc.gtpu_flags_mask:
+                header = ofproto.OXM_OF_GTPU_FLAGS_W
+            else:
+                header = ofproto.OXM_OF_GTPU_FLAGS
+            self.append_field(header, self._flow.gtpu_flags,
+                              self._wc.gtpu_flags_mask)
+
+        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_VER):
+            if self._wc.gtpu_ver_mask:
+                header = ofproto.OXM_OF_GTPU_VER_W
+            else:
+                header = ofproto.OXM_OF_GTPU_VER
+            self.append_field(header, self._flow.gtpu_ver,
+                              self._wc.gtpu_ver_mask)
+
+        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_MSGTYPE):
+            if self._wc.gtpu_msgtype_mask:
+                header = ofproto.OXM_OF_GTPU_MSGTYPE_W
+            else:
+                header = ofproto.OXM_OF_GTPU_MSGTYPE
+            self.append_field(header, self._flow.gtpu_msgtype,
+                              self._wc.gtpu_msgtype_mask)
+
+        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_TEID):
+            if self._wc.gtpu_teid_mask:
+                header = ofproto.OXM_OF_GTPU_TEID_W
+            else:
+                header = ofproto.OXM_OF_GTPU_TEID
+            self.append_field(header, self._flow.gtpu_teid,
+                              self._wc.gtpu_teid_mask)
 
         field_offset = offset + 4
         for f in self.fields:
@@ -2340,6 +2387,49 @@ class MTGreSeqNum(OFPMatchField):
         self.value = value
         self.mask = mask
 
+
+@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_FLAGS,
+                                      ofproto.OXM_OF_GTPU_FLAGS_W])
+class MTGtpuFlags(OFPMatchField):
+    pack_str = '!I'
+
+    def __init__(self, header, value, mask=None):
+        super(MTGtpuFlags, self).__init__(header)
+        self.value = value
+        self.mask = mask
+
+@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_VER,
+                                      ofproto.OXM_OF_GTPU_VER_W])
+class MTGtpuVer(OFPMatchField):
+    pack_str = '!I'
+
+    def __init__(self, header, value, mask=None):
+        super(MTGtpuVer, self).__init__(header)
+        self.value = value
+        self.mask = mask
+
+@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_MSGTYPE,
+                                      ofproto.OXM_OF_GTPU_MSGTYPE_W])
+class MTGtpuMsgType(OFPMatchField):
+@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_MSGTYPE,
+                                      ofproto.OXM_OF_GTPU_MSGTYPE_W])
+class MTGtpuMsgType(OFPMatchField):
+    pack_str = '!I'
+
+    def __init__(self, header, value, mask=None):
+        super(MTGtpuMsgType, self).__init__(header)
+        self.value = value
+        self.mask = mask
+
+@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_TEID,
+                                      ofproto.OXM_OF_GTPU_TEID_W])
+class MTGtpuTeid(OFPMatchField):
+    pack_str = '!I'
+
+    def __init__(self, header, value, mask=None):
+        super(MTGtpuTeid, self).__init__(header)
+        self.value = value
+        self.mask = mask
 
 @OFPMatchField.register_field_header([ofproto.OXM_OF_VXLAN_FLAGS,
                                       ofproto.OXM_OF_VXLAN_FLAGS_W])
