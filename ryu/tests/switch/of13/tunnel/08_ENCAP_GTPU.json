@@ -147,8 +147,8 @@
 		"egress":[
 		    "ethernet(dst='22:33:33:33:33:33', src='12:22:22:22:22:22', ethertype=0x0800)",
 		    "ipv4(proto=17, src='10.0.0.1', dst='172.21.0.2', ttl=64)",
-		    "udp(dst_port=2152, src_port=5432)",
-		    "gtpu(teid=1)",
+		    "udp(csum=128, dst_port=2152, src_port=5432)",
+		    "gtpu(flags=48, teid=1)",
 		    "ipv4(proto=6, src='1.1.1.1', dst='2.2.2.2')",
 		    "tcp(dst_port=2222, src_port=1111)",
 		    "b'\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f'"
