@@ -1315,7 +1315,7 @@ class OFPMatch(StringifyMixin):
             self.append_field(header, self._flow.gre_seqnum,
                               self._wc.gre_seqnum_mask)
 
-        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_flags):
+        if self._wc.ft_test(ofproto.OFPXMT_OFB_GTPU_FLAGS):
             if self._wc.gtpu_flags_mask:
                 header = ofproto.OXM_OF_GTPU_FLAGS_W
             else:

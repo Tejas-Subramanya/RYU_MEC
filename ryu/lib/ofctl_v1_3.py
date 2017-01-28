@@ -275,7 +275,8 @@ def to_match(dp, attrs):
                'mpls_bos': int,
                'pbb_isid': to_match_masked_int,
                'tunnel_id': to_match_masked_int,
-               'ipv6_exthdr': to_match_masked_int}
+               'ipv6_exthdr': to_match_masked_int,
+	       'gtpu_teid': int}
 
     keys = {'dl_dst': 'eth_dst',
             'dl_src': 'eth_src',
