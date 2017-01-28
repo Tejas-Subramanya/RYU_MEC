@@ -2427,9 +2427,6 @@ class MTGtpuVer(OFPMatchField):
 @OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_MSGTYPE,
                                       ofproto.OXM_OF_GTPU_MSGTYPE_W])
 class MTGtpuMsgType(OFPMatchField):
-@OFPMatchField.register_field_header([ofproto.OXM_OF_GTPU_MSGTYPE,
-                                      ofproto.OXM_OF_GTPU_MSGTYPE_W])
-class MTGtpuMsgType(OFPMatchField):
     pack_str = '!I'
 
     def __init__(self, header, value, mask=None):
