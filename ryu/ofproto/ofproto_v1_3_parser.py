@@ -1662,19 +1662,19 @@ class OFPMatch(StringifyMixin):
         self._wc.ft_set(ofproto.OFPXMT_OFB_GRE_SEQNUM)
         self._flow.gre_key = seq
 
-    def set_gtpu_flags(self, seq):
+    def set_gtpu_flags(self, flags):
         self._wc.ft_set(ofproto.OFPXMT_OFB_GTPU_FLAGS)
         self._flow.gtpu_flags = flags
 
-    def set_gtpu_ver(self, seq):
+    def set_gtpu_ver(self, ver):
         self._wc.ft_set(ofproto.OFPXMT_OFB_GTPU_VER)
         self._flow.gtpu_ver = ver
 
-    def set_gtpu_msgtype(self, seq):
+    def set_gtpu_msgtype(self, msgtype):
         self._wc.ft_set(ofproto.OFPXMT_OFB_GTPU_MSGTYPE)
         self._flow.gtpu_msgtype = msgtype
 
-    def set_gtpu_teid(self, seq):
+    def set_gtpu_teid(self, teid):
         self._wc.ft_set(ofproto.OFPXMT_OFB_GTPU_TEID)
         self._flow.gtpu_teid = teid
 
